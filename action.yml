@@ -1,0 +1,38 @@
+name: NuGet Push
+description: An opinionated action that downloads existing NuGet packages and pushes them to a package source and publishes them.
+inputs:
+  source:
+    description: The NuGet Server URL.
+    required: true
+    default: 'https://api.nuget.org/v3/index.json'
+  token:
+    description: The NuGet API key.
+    required: true
+  packageName:
+    description: Defines the name of the packet to be sent to the Nuget server
+    required: true
+    default: 'package.1.0.0.nupkg'
+  level:
+    description: Sets the verbosity level of the command. Allowed values are quiet, normal and detailed. The default is quiet.
+    required: true
+    default: 'quiet'
+runs:
+  using: composite
+  steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.packageName }}
+
+    - name: NuGet
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: latest
+        nuget-api-key: ${{ inputs.token }}
+
+    - name: Push
+      run: nuget push '${{ github.workspace }}/*.nupkg' -Source ${{ inputs.source }} -ApiKey ${{ inputs.token }} -SkipDuplicate -Verbosity ${{ inputs.level }}
+      shell: bash
+branding:
+  icon: 'umbrella'
+  color: 'blue'
