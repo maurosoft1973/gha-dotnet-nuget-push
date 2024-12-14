@@ -27,7 +27,7 @@ runs:
     - name: NuGet
       uses: nuget/setup-nuget@v2.0.1
       with:
-        nuget-version: latest
+        nuget-version: '6.11.1'
         nuget-api-key: ${{ inputs.token }}
 
     - name: Push
