@@ -25,7 +25,7 @@ runs:
         name: ${{ inputs.packageName }}
 
     - name: NuGet
-      uses: nuget/setup-nuget@v2
+      uses: nuget/setup-nuget@v2.0.1
       with:
         nuget-version: latest
         nuget-api-key: ${{ inputs.token }}
